@@ -107,7 +107,26 @@ CREATE TABLE contact_address
 WITH (
     OIDS = FALSE
 );
+/* Chat Information */
 
+CREATE TABLE chatrooms 
+(
+	chatr_id serial,
+	chatr_name character varying(20) NOT NULL,
+	primary key (chatr_id)
+	
+)
+
+CREATE TABLE chatroom_users 
+(
+	chatr_id integer not null,
+	user_id integer not null,
+	primary key (chatr_id, user_id),
+	foreign key (chatr_id) references chatrooms(chatr_id),
+	foreign key (user_id) references users(user_id)
+)
+
+/* Inputs for testing*/
 insert into users(username, password, fname, lname) values('Thamy', 'LisiWoo', 'Thaman', 'Woo');
 insert into users(username, password, fname, lname) values('poop', 'poop', 'Turd', 'Master');
 
@@ -139,6 +158,8 @@ SELECT * FROM user_phone
 SELECT * FROM user_address
 SELECT * FROM contact_phone
 SELECT * FROM contact_address
+SELECT * FROM chatrooms
+SELECT * FROM chatroom_users
 */
 
 /*

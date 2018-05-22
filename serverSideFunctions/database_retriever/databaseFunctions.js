@@ -171,6 +171,7 @@ var addContact = (user_id, fname, lname, bio) => {
     })
 }
 
+
 var addContactwithAccount = (user_id, fname, lname, acct_num) => {
     return new Promise((resolve, reject) => {
         pgpool.query('insert into contacts(user_id, firstname, lastname, with_account, acct_num) values($1, $2, $3, true, $4);', [user_id, fname, lname, acct_num], (err, res) => {
@@ -184,18 +185,38 @@ var addContactwithAccount = (user_id, fname, lname, acct_num) => {
 
 var addContactAddress = (cont_id, user_id, address) => {
     return new Promise((resolve, reject) => {
+
+      if(address == '' && address.length <= 50){
+        reject('Invalid address')
+      }else{
         pgpool.query('INSERT INTO contact_address(cont_id, user_id, address) VALUES($1,$2,$3);', [cont_id, user_id, address], (err, res) => {
             if (err) {
                 reject('Address Not Added')
             }
             resolve('Address Added')
         })
+
+      }
+      
     })
 }
 
-var createAccount = (e_mail, password) => {
-    return new Promise((resolve, reject) => {
+
+var createAccount = (e_mail, password, last_name, first_name) => {
+    return new Promise((resolve, reject)=>{
+
         resolve('Account Added')
+    })
+}
+//--------------------- User Account Edits And Additions ---------------------
+var addUserAddress = (user_id, address) => {
+    return new Promise((resolve, reject) => {
+        pgpool.query('insert into user_address(user_id, address) values($1, $2);', [user_id, address], (err, res) => {
+            if (err) {
+                reject('Address Not Added')
+            }
+            resolve('Address Added')
+        })
     })
 }
 //--------------------- User Account Edits And Additions ---------------------
@@ -232,6 +253,8 @@ var editUserBio = (user_id, new_bio) => {
     })
 }
 
+
+
 module.exports = {
     getLoginData,
     getUserData,
@@ -245,4 +268,6 @@ module.exports = {
     editUserBio,
     addContact,
     addContactwithAccount
+
 }
+
